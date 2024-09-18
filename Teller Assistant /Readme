@@ -1,0 +1,19 @@
+
+How much is the customer withdrawing? (up to $100):
+
+99.99
+-----------------------------------------
+ 
+Give the customer the following currency:
+ 
+-----------------------------------------
+20 dollar bills: 4 
+10 dollar bills: 1
+5 dollar bills: 1
+1 dollar bills: 4
+Quarters: 3
+Dimes : 2
+Nickels: 0
+Pennies: 4
+ 
+ Hint: Use both the modulo operator and integer division.
