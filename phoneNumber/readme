@@ -1,0 +1,30 @@
+Create a program that will generate and print out 10 random phone numbers, of the format XXX-XXX-XXXX.
+
+    Include the dashes in the output.
+    Do not let the first three digits (the area code) contain an 8 or a 9. The Area Code should not start with a 0
+    Make sure the second set of three digits is less than 655 and should not start with a 0.
+    No need to create a separate class.
+
+---------------------------------
+
+10 RANDOM PHONE NUMBERS
+
+765-432-9834
+
+344-653-8846
+
+167-285-9462
+
+210-354-9283
+
+177-482-7342
+
+525-423-4233
+
+624-635-3894
+
+272-137-1793
+
+661-104-0798
+
+100-489-8372
