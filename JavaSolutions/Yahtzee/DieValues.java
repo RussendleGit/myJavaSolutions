@@ -1,72 +1,75 @@
 import java.util.Arrays;
 
-class YahtzeeGame {
-    public static void main(String[] args) {
-        DieValues die = new DieValues();
-        System.out.println(die);
-    }
-    public static int getScore(DieValues dieValues) {
-        int score = dieValues.sum();
-
-
-        // Calculate Standard Score and store in a variable
-        // Check for each category of bonus points and add to score
-        // Be sure that you don't give extra bonus points
-        // (three of a kind AND Yahtzee instead of just Yahtzee)
-        // return the total number of points.
-        return 0;
-    }
-    
-}
-
 public class DieValues {
-    private int[] values = new int[5];
-    private int[] occurrences = {0, 0, 0, 0, 0};
-    boolean isThreeOfAKind = false;
-    boolean isFourOfAKind = false;
-    boolean isFullHouse = false;
-    boolean isSmallStraight = false;
-    boolean isLargeStraight = false;
-    boolean isYatzee = false;
+    private int[] values;
+    private int[] occurrences = new int[6];
+    public int score;
+    private boolean[] bonusScores = {false, // is 3 of a kind
+         false, // is four of a kind
+         false, // is full house
+         false, // is small straight
+         false, // is large straight
+         false // is yattzee
+        };
     
-    public DieValues() { // im going to look back at this in disappointmnet lol
-        for (int i = 0; i < values.length; i++) {
+    public DieValues() {
+        values = new int[5];
+        for (int i = 0; i < values.length ; i++) {
             values[i] = (int) (Math.random() * 6) + 1;
-            if (values[i] == 1) {
-                occurrences[0]++;
-            } else if (values[i] == 2) {
-                occurrences[1]++;
-            } else if (values[i] == 3) {
-                occurrences[2]++;
-            } else if (values[i] == 4) {
-                occurrences[3]++;
-            } else {
-                occurrences[4]++;
-            }
         }
-
+    }
+    public DieValues(int[] vals) {
+        values = vals;
+    }
+    
+    public void FindBonusScores() { // im going to look back at this in disappointmnet lol
+        for (int i = 0; i < values.length ; i++) {
+            switch (values[i]) {
+                case 1 -> occurrences[0]++;
+                case 2 -> occurrences[1]++;
+                case 3 -> occurrences[2]++;
+                case 4 -> occurrences[3]++;
+                case 5 -> occurrences[4]++;
+                case 6 -> occurrences[5]++;
+                default -> throw new AssertionError();
+            }
+            
+        }
         for (int numbers : occurrences) {
-            if (numbers == 5) {
-                isYatzee = true;
-                break;
-            } else if (numbers == 4) {
-                isFourOfAKind = true;
-                break;
-            } else if (numbers == 3) {
-                isThreeOfAKind = true;
-            }
-            if (numbers == 2 && isThreeOfAKind) {
-                isFullHouse = true;
-                isThreeOfAKind = false;
-                break;
+            switch (numbers) {
+                case 5:
+                    bonusScores[5] = true;
+                    break;
+                case 4:
+                    bonusScores[1] = true;
+                    break;
+                case 3:
+                    for (int findingFullHouse : occurrences) {
+                        if (findingFullHouse == 2) {
+                            bonusScores[0] = false;
+                            bonusScores[2] = true;
+                        } else {
+                            bonusScores[0] = true;
+                        }
+                    }
+                    break;
             }
         }
-
         Arrays.sort(values);
-        // 1, 2, 3, 4, 5
-        // 1, 1, 2, 3, 4
-        // 2, 2, 3, 4, 5
-        // 3, 3, 4, 5, 1
+        for (int i = 0; i < values.length; i++) {
+            if (i + 3 < values.length             &&
+                values[i] + 1 == values[i + 1]     &&
+                values[i + 1] + 1 == values[i + 2] &&
+                values[i + 2] + 1 == values[i + 3]) {
+                    if (i + 4 < values.length &&
+                        values[i + 3] + 1 == values[i + 4]) {
+                            bonusScores[4] = true;
+                        } else {
+                            bonusScores[3] = true;
+                        }
+
+                }
+        }
     }
 
     public int sum() {
@@ -75,6 +78,27 @@ public class DieValues {
             collection += values[i];
         } 
         return collection;
+    }
+
+    public int GetYatzeeScore() {
+        this.FindBonusScores();
+        score = this.sum();
+        if (bonusScores[0] || bonusScores[1]) {
+            score *= 2;
+        } 
+        if (bonusScores[2]) {
+            score += 25;
+        }
+        if (bonusScores[3]) {
+            score += 30;
+        }
+        if (bonusScores[4]) {
+            score += 40;
+        }
+        if (bonusScores[5]) {
+            score += 50;
+        }
+        return score;
     }
 
 }
